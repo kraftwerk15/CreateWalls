@@ -14,6 +14,8 @@
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <RootNamespace>CreateWallsLocal</RootNamespace>
+    <AssemblyName>CreateWalls</AssemblyName>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -31,6 +33,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugCloud|AnyCPU'">
+    <RootNamespace>CreateWallsDesignAutomation</RootNamespace>
+    <AssemblyName>CreateWalls</AssemblyName>
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\DebugCloud\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -73,16 +77,16 @@
   <ItemGroup Condition="$(Configuration)=='Debug' Or $(Configuration)=='Release'">
     <Compile Include="App.cs" />
     <None Include="CreateWalls.addin" />
-    <Reference Include="RevitAPI">
-      <HintPath>C:\Program Files\Autodesk\Revit 2021\RevitAPI.dll</HintPath>
-    </Reference>
+    <Compile Include="ThisApplication.cs" />
     <Reference Include="RevitAPIUI">
       <HintPath>C:\Program Files\Autodesk\Revit 2021\RevitAPIUI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="RevitAPI">
+      <HintPath>C:\Program Files\Autodesk\Revit 2021\RevitAPI.dll</HintPath>
+    </Reference>
     <Compile Include="Construct.cs" />
-    <Compile Include="ThisApplication.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
