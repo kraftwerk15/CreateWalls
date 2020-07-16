@@ -22,7 +22,7 @@ using Autodesk.Revit.DB.Events;
 using Autodesk.Revit.DB.Visual;
 using forms = System.Windows.Forms;
 
-namespace CreateWalls
+namespace CreateWallsCommon
 {
 	[TransactionAttribute(TransactionMode.Manual)]
 	[RegenerationAttribute(RegenerationOption.Manual)]
@@ -37,7 +37,7 @@ namespace CreateWalls
 			Application app = uiApp.Application;
 
 
-			string ruta = App.ExecutingAssemblyPath;
+			//string ruta = App.ExecutingAssemblyPath;
 
 			// Get Active View
 			View activeView = uidoc.ActiveView;

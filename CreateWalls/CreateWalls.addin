@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <RevitAddIns>
-	<AddIn Type="DBApplication">
+	<AddIn Type="Command">
 		<Name>LAOS Create Walls</Name>
 		<Assembly>CreateWalls.dll</Assembly>
 		<AddInId>92289B31-86BA-43C0-8CA6-1F7DE8C9B0F5</AddInId>
