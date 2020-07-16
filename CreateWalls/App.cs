@@ -5,15 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Autodesk.Revit.DB;
+using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.UI;
 using System.Windows.Media.Imaging;
 
-namespace CreateWalls
+namespace CreateWallsLocal
 {
     [Autodesk.Revit.Attributes.Transaction(Autodesk.Revit.Attributes.TransactionMode.Manual)]
     [Autodesk.Revit.Attributes.Regeneration(Autodesk.Revit.Attributes.RegenerationOption.Manual)]
 
-    class App : IExternalApplication
+    public class App : IExternalApplication
     {
         public static string ExecutingAssemblyPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
 
@@ -32,20 +33,17 @@ namespace CreateWalls
 
 
             // agregar la imagen al button1
-            //button11.LargeImage = new BitmapImage(new Uri("pack://application:,,,/CreateWalls;component/Resources/split-(2).png"));
+            button11.LargeImage = new BitmapImage(new Uri("pack://application:,,,/CreateWalls;component/Resources/split-(2).png"));
 
-            button11.ToolTip = "..";
+            //button11.ToolTip = "..";
             button11.LongDescription = "..";
-
+            //DesignAutomationBridge.DesignAutomationReadyEvent += HandleDesignAutomationReadyEvent;
             return Result.Succeeded;
         }
 
         public Result OnShutdown(UIControlledApplication application)
         {
-
             return Result.Succeeded;
         }
-
-
     }
 }

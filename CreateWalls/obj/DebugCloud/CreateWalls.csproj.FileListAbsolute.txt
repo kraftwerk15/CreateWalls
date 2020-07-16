@@ -1,0 +1,10 @@
+C:\Users\mgray\Source\Repos\CreateWalls\CreateWalls\obj\DebugCloud\CreateWalls.csproj.CoreCompileInputs.cache
+C:\Users\mgray\Source\Repos\CreateWalls\CreateWalls\bin\DebugCloud\CreateWalls.dll.config
+C:\Users\mgray\Source\Repos\CreateWalls\CreateWalls\bin\DebugCloud\CreateWalls.dll
+C:\Users\mgray\Source\Repos\CreateWalls\CreateWalls\bin\DebugCloud\CreateWalls.pdb
+C:\Users\mgray\Source\Repos\CreateWalls\CreateWalls\bin\DebugCloud\DesignAutomationBridge.dll
+C:\Users\mgray\Source\Repos\CreateWalls\CreateWalls\bin\DebugCloud\RevitAPI.dll
+C:\Users\mgray\Source\Repos\CreateWalls\CreateWalls\bin\DebugCloud\RevitAPI.xml
+C:\Users\mgray\Source\Repos\CreateWalls\CreateWalls\obj\DebugCloud\CreateWalls.csproj.CopyComplete
+C:\Users\mgray\Source\Repos\CreateWalls\CreateWalls\obj\DebugCloud\CreateWalls.dll
+C:\Users\mgray\Source\Repos\CreateWalls\CreateWalls\obj\DebugCloud\CreateWalls.pdb
