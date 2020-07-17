@@ -94,11 +94,11 @@ namespace CreateWallsCommon
 					// close form1
 					#endregion
 
-					string filepathJson = "SketchItInput.json";
+					string filepathJson = @"A:\Users\mgray\OneDrive - ARCO\Desktop\tempJson.json";
 					ReactJson jsonDeserialized = ReactJson.Parse(filepathJson);
 
 					CreateWallsCommon.Construct c = new CreateWallsCommon.Construct();
-					c.CreateFloors(jsonDeserialized, doc);
+					c.CreateWalls(jsonDeserialized, doc);
 					c.CreateFloors(jsonDeserialized, doc);
 				}
 				catch (Exception e)
