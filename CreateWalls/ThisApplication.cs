@@ -1,30 +1,13 @@
 ﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Globalization;
-using System.Diagnostics;
 using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.UI;
-using Autodesk.Revit.UI.Events;
-using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.DB;
-using Autodesk.Revit.DB.Plumbing;
-using Autodesk.Revit.DB.Mechanical;
-using Autodesk.Revit.DB.Lighting;
-using Autodesk.Revit.DB.Electrical;
-using Autodesk.Revit.DB.Architecture;
-using Autodesk.Revit.DB.Structure;
-using Autodesk.Revit.DB.Events;
-using Autodesk.Revit.DB.Visual;
-using forms = System.Windows.Forms;
+using CreateWallsDesignAutomation;
 
 namespace CreateWallsCommon
 {
-	[TransactionAttribute(TransactionMode.Manual)]
+    [TransactionAttribute(TransactionMode.Manual)]
 	[RegenerationAttribute(RegenerationOption.Manual)]
 	class ThisApplication : IExternalCommand
 	{
@@ -111,8 +94,12 @@ namespace CreateWallsCommon
 					// close form1
 					#endregion
 
-                    Construct c = new Construct();
-                    c.place_WallsDoorsWindows(doc);
+					string filepathJson = "SketchItInput.json";
+					ReactJson jsonDeserialized = ReactJson.Parse(filepathJson);
+
+					CreateWallsCommon.Construct c = new CreateWallsCommon.Construct();
+					c.CreateFloors(jsonDeserialized, doc);
+					c.CreateFloors(jsonDeserialized, doc);
 				}
 				catch (Exception e)
 				{

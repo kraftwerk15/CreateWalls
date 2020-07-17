@@ -121,3 +121,5 @@ C:\Users\mgray\Source\Repos\CreateWalls\CreateWalls\obj\Debug\CreateWalls.csproj
 C:\Users\mgray\Source\Repos\CreateWalls\CreateWalls\obj\Debug\CreateWalls.csproj.CopyComplete
 C:\Users\mgray\Source\Repos\CreateWalls\CreateWalls\obj\Debug\CreateWalls.dll
 C:\Users\mgray\Source\Repos\CreateWalls\CreateWalls\obj\Debug\CreateWalls.pdb
+C:\Users\mgray\Source\Repos\CreateWalls\CreateWalls\bin\Debug\Newtonsoft.Json.dll
+C:\Users\mgray\Source\Repos\CreateWalls\CreateWalls\obj\Debug\CreateWalls.csprojAssemblyReference.cache

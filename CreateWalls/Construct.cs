@@ -5,11 +5,75 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CreateWallsDesignAutomation;
 
+// ReSharper disable once CheckNamespace
 namespace CreateWallsCommon
 {
-    class Construct
+    internal class Construct
     {
+		internal void CreateWalls(ReactJson jsonReact, Document newDoc)
+		{
+			FilteredElementCollector levelCollector = new FilteredElementCollector(newDoc);
+			levelCollector.OfClass(typeof(Level));
+			ElementId someLevelId = levelCollector.FirstElementId();
+			if (someLevelId == null || someLevelId.IntegerValue < 0) throw new System.IO.InvalidDataException("ElementID is invalid.");
+
+			List<Curve> curves = new List<Curve>();
+			foreach (ReactJson.WallLine lines in jsonReact.Walls)
+			{
+				XYZ start = new XYZ(lines.Start.X, lines.Start.Y, lines.Start.Z);
+				XYZ end = new XYZ(lines.End.X, lines.End.Y, lines.End.Z);
+				curves.Add(Line.CreateBound(start, end));
+			}
+
+			using (Transaction wallTrans = new Transaction(newDoc, "Create some walls"))
+			{
+				wallTrans.Start();
+
+				foreach (Curve oneCurve in curves)
+				{
+					Wall.Create(newDoc, oneCurve, someLevelId, false);
+				}
+
+				wallTrans.Commit();
+			}
+		}
+
+		internal void CreateFloors(ReactJson jsonReact, Document newDoc)
+		{
+			foreach (List<ReactJson.Point> floorPoints in jsonReact.Floors)
+			{
+				CurveArray floor = new CurveArray();
+				int lastPointOnFloor = floorPoints.Count - 1;
+
+				for (int pointNum = 0; pointNum <= lastPointOnFloor; pointNum++)
+				{
+					XYZ startPoint = new XYZ(floorPoints[pointNum].X, floorPoints[pointNum].Y, floorPoints[pointNum].Z);
+					XYZ endPoint;
+
+					if (pointNum == lastPointOnFloor)
+					{
+						endPoint = new XYZ(floorPoints[0].X, floorPoints[0].Y, floorPoints[0].Z);
+					}
+					else
+					{
+						endPoint = new XYZ(floorPoints[pointNum + 1].X, floorPoints[pointNum + 1].Y, floorPoints[pointNum + 1].Z);
+					}
+
+					Curve partOfFloor = Line.CreateBound(startPoint, endPoint);
+					floor.Append(partOfFloor);
+				}
+
+				using (Transaction floorTrans = new Transaction(newDoc, "Create a floor"))
+				{
+					floorTrans.Start();
+					newDoc.Create.NewFloor(floor, false);
+					floorTrans.Commit();
+				}
+			}
+		}
+
 		public void place_WallsDoorsWindows(Document doc)
 		{
 
