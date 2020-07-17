@@ -8,6 +8,7 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.ApplicationServices;
 using DesignAutomationFramework;
 using System.Windows.Media.Imaging;
+using CreateWallsCommon;
 
 namespace CreateWallsDesignAutomation
 {
@@ -50,14 +51,12 @@ namespace CreateWallsDesignAutomation
             string filePath = "sketchIt.rvt";
 
             string filepathJson = "SketchItInput.json";
-            //SketchItParams jsonDeserialized = SketchItParams.Parse(filepathJson);
-
-            //CreateWalls(jsonDeserialized, newDoc);
-
-            //CreateFloors(jsonDeserialized, newDoc);
+            ReactJson jsonDeserialized = ReactJson.Parse(filepathJson);
 
             CreateWallsCommon.Construct c = new CreateWallsCommon.Construct();
-            c.place_WallsDoorsWindows(newDoc);
+            c.CreateFloors(jsonDeserialized, newDoc);
+            c.CreateFloors(jsonDeserialized, newDoc);
+            //c.place_WallsDoorsWindows(newDoc);
 
             newDoc.SaveAs(filePath);
         }

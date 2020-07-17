@@ -25,18 +25,18 @@ namespace CreateWallsLocal
             application.CreateRibbonTab(tabName);
 
             // Crear Panel 1
-            RibbonPanel panel11 = application.CreateRibbonPanel(tabName, "Mini House Creation");
+            RibbonPanel panel11 = application.CreateRibbonPanel(tabName, "Wall and Floor Creator");
 
 
             // agregar un boton
-            PushButton button11 = panel11.AddItem(new PushButtonData("CreateWallsButton", "CREATE", ExecutingAssemblyPath, "CreateWalls.ThisApplication")) as PushButton;
+            PushButton button11 = panel11.AddItem(new PushButtonData("CreateWallsButton", "CREATE", ExecutingAssemblyPath, "CreateWallsCommon.ThisApplication")) as PushButton;
 
 
             // agregar la imagen al button1
-            button11.LargeImage = new BitmapImage(new Uri("pack://application:,,,/CreateWalls;component/Resources/split-(2).png"));
+            button11.LargeImage = new BitmapImage(new Uri("pack://application:,,,/CreateWalls;component/Resource/react_64.png"));
 
             //button11.ToolTip = "..";
-            button11.LongDescription = "..";
+            button11.LongDescription = "Add a long description later";
             //DesignAutomationBridge.DesignAutomationReadyEvent += HandleDesignAutomationReadyEvent;
             return Result.Succeeded;
         }
