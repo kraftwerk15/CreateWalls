@@ -102,6 +102,8 @@
   <ItemGroup>
     <EmbeddedResource Include="Resource\react_64.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="PackageContents.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

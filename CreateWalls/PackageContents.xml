@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ApplicationPackage>
+  <Components Description="Create Walls">
+    <RuntimeRequirements OS="Win64"
+                         Platform="Revit"
+                         SeriesMin="R2021"
+                         SeriesMax="R2021" />
+    <ComponentEntry AppName="CreateWalls"
+                    Version="1.0.0"
+                    ModuleName="./Contents/CreateWallsCloud.addin"
+                    AppDescription="Creates walls and floors"
+                    LoadOnCommandInvocation="False"
+                    LoadOnRevitStartup="True" />
+  </Components>
+</ApplicationPackage>

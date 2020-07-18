@@ -2,9 +2,9 @@
 <RevitAddIns>
 	<AddIn Type="DBApplication">
 		<Name>LAOS Create Walls</Name>
-		<Assembly>CreateWalls.dll</Assembly>
+		<Assembly>.\CreateWalls.dll</Assembly>
 		<AddInId>92289B31-86BA-43C0-8CA6-1F7DE8C9B0F5</AddInId>
-		<FullClassName>CreateWalls.App</FullClassName>
+		<FullClassName>CreateWallsDesignAutomation.App</FullClassName>
 		<Text>LAOS Addin</Text>
 		<VendorId>LAOS</VendorId>
 		<VendorDescription>LAOS, www.dynoscript.com</VendorDescription>
