@@ -70,6 +70,7 @@
   <ItemGroup Condition="$(Configuration)=='DebugCloud' Or $(Configuration)=='ReleaseCloud'">
     <Compile Include="AppDesignAutomation.cs" />
     <None Include="CreateWallsCloud.addin" />
+    <Content Include="CreateWall.bundle\PackageContents.xml" />
     <PackageReference Include="Autodesk.Forge.DesignAutomation.Revit">
       <Version>2021.0.1</Version>
     </PackageReference>
@@ -103,7 +104,7 @@
     <EmbeddedResource Include="Resource\react_64.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="PackageContents.xml" />
+    <Folder Include="CreateWall.bundle\Contents\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
