@@ -15,6 +15,8 @@ namespace CreateWallsDesignAutomation
         public IList<WallLine> Walls { get; set; }
         [JsonProperty(PropertyName = "floors")]
         public IList<IList<Point>> Floors { get; set; }
+        [JsonProperty(PropertyName = "Levels")]
+        public IList<Level> Levels { get; set; }
         static public ReactJson Parse(string jsonPath)
         {
             try
@@ -47,6 +49,13 @@ namespace CreateWallsDesignAutomation
             public Point Start { get; set; }
             [JsonProperty(PropertyName = "end")]
             public Point End { get; set; }
+        }
+        internal class Level
+        {
+            [JsonProperty(PropertyName = "Elevation")]
+            public double Elevation { get; set; }
+            [JsonProperty(PropertyName = "Name")]
+            public string Name { get; set; }
         }
     }
 }

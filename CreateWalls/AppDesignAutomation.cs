@@ -47,6 +47,11 @@ namespace CreateWallsDesignAutomation
             string filePath = "sketchIt.rvt";
             string filepathJson = "SketchItInput.json";
             string filepathXML = "xmlDocument.xml";
+
+            Dictionary<string, double> levelsList = new Dictionary<string, double>();
+            List<List<Point>> floorsList = new List<List<Point>>();
+            List<Line> wallsList = new List<Line>();
+
             ReactJson json = new ReactJson();
             if (File.Exists(filepathJson))
             {
@@ -56,13 +61,23 @@ namespace CreateWallsDesignAutomation
             {
                 XmlDocument xmlDocument = new XmlDocument();
                 xmlDocument.Load(filepathXML);
-                XmlNodeList nodeList = xmlDocument.GetElementsByTagName("Floor");
-                foreach (XmlNode node in nodeList)
+                XmlNodeList levelsXmlList = xmlDocument.SelectNodes("//building/ProjectInformation/Levels");
+                foreach (XmlNode levelsXml in levelsXmlList)
+                {
+                    //something here
+                }
+                XmlNodeList nodeList = xmlDocument.SelectNodes("//building/Floors");
+                foreach (XmlNode floorsXml in nodeList)
+                {
+                    //something here
+                }
+                XmlNodeList wallList = xmlDocument.SelectNodes("//building/Walls");
+                foreach (XmlNode wallsXml in wallList)
                 {
                     //something here
                 }
             }
-            List<List<Point>> floorsList = new List<List<Point>>();
+            
             foreach (List<ReactJson.Point> floor in json.Floors)
             {
                 List<Point> fl = new List<Point>();
@@ -74,7 +89,7 @@ namespace CreateWallsDesignAutomation
                 }
                 floorsList.Add(fl);
             }
-            List<Line> wallsList = new List<Line>();
+            
             foreach (ReactJson.WallLine walls in json.Walls)
             {
                 XYZ start = new XYZ(walls.Start.X, walls.Start.Y, walls.Start.Z);
@@ -82,9 +97,14 @@ namespace CreateWallsDesignAutomation
                 Line line = Line.CreateBound(start, end);
                 wallsList.Add(line);
             }
-
+            
+            foreach (ReactJson.Level level in json.Levels)
+            {
+                levelsList.Add(level.Name, level.Elevation);
+            }
 
             CreateWallsCommon.Construct c = new CreateWallsCommon.Construct();
+            c.CreateLevels(newDoc, levelsList);
             c.CreateFloors(floorsList, newDoc);
             c.CreateWalls(wallsList, newDoc);
 

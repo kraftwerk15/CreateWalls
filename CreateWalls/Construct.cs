@@ -12,7 +12,25 @@ namespace CreateWallsCommon
 {
     internal class Construct
     {
-		internal void CreateWalls(List<Line> jsonReact, Document newDoc)
+        internal void CreateLevels(Document doc, Dictionary<string, double> levels)
+        {
+            
+            
+            using (Transaction levelTrans = new Transaction(doc, "Create some levels"))
+            {
+                levelTrans.Start();
+
+                foreach (KeyValuePair<string, double> level in levels)
+                {
+                    Level l = Level.Create(doc, level.Value);
+                    l.Name = level.Key;
+                }
+
+                levelTrans.Commit();
+            }
+		}
+        
+        internal void CreateWalls(List<Line> jsonReact, Document newDoc)
 		{
 			FilteredElementCollector levelCollector = new FilteredElementCollector(newDoc);
 			levelCollector.OfClass(typeof(Level));
