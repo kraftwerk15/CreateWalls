@@ -12,26 +12,26 @@ namespace CreateWallsCommon
 {
     internal class Construct
     {
-		internal void CreateWalls(ReactJson jsonReact, Document newDoc)
+		internal void CreateWalls(List<Line> jsonReact, Document newDoc)
 		{
 			FilteredElementCollector levelCollector = new FilteredElementCollector(newDoc);
 			levelCollector.OfClass(typeof(Level));
 			ElementId someLevelId = levelCollector.FirstElementId();
 			if (someLevelId == null || someLevelId.IntegerValue < 0) throw new System.IO.InvalidDataException("ElementID is invalid.");
 
-			List<Curve> curves = new List<Curve>();
-			foreach (ReactJson.WallLine lines in jsonReact.Walls)
-			{
-				XYZ start = new XYZ(lines.Start.X, lines.Start.Y, lines.Start.Z);
-				XYZ end = new XYZ(lines.End.X, lines.End.Y, lines.End.Z);
-				curves.Add(Line.CreateBound(start, end));
-			}
+			List<Line> curves = jsonReact;
+			//foreach (ReactJson.WallLine lines in jsonReact)
+			//{
+			//	XYZ start = new XYZ(lines.Start.X, lines.Start.Y, lines.Start.Z);
+			//	XYZ end = new XYZ(lines.End.X, lines.End.Y, lines.End.Z);
+			//	curves.Add(Line.CreateBound(start, end));
+			//}
 
 			using (Transaction wallTrans = new Transaction(newDoc, "Create some walls"))
 			{
 				wallTrans.Start();
 
-				foreach (Curve oneCurve in curves)
+				foreach (Line oneCurve in curves)
 				{
 					Wall.Create(newDoc, oneCurve, someLevelId, false);
 				}
@@ -40,25 +40,25 @@ namespace CreateWallsCommon
 			}
 		}
 
-		internal void CreateFloors(ReactJson jsonReact, Document newDoc)
+		internal void CreateFloors(List<List<Point>> jsonReact, Document newDoc)
 		{
-			foreach (List<ReactJson.Point> floorPoints in jsonReact.Floors)
+			foreach (List<Point> floorPoints in jsonReact)
 			{
 				CurveArray floor = new CurveArray();
 				int lastPointOnFloor = floorPoints.Count - 1;
-
+				
 				for (int pointNum = 0; pointNum <= lastPointOnFloor; pointNum++)
 				{
-					XYZ startPoint = new XYZ(floorPoints[pointNum].X, floorPoints[pointNum].Y, floorPoints[pointNum].Z);
+					XYZ startPoint = new XYZ(floorPoints[pointNum].Coord.X, floorPoints[pointNum].Coord.Y, floorPoints[pointNum].Coord.Z);
 					XYZ endPoint;
 
 					if (pointNum == lastPointOnFloor)
 					{
-						endPoint = new XYZ(floorPoints[0].X, floorPoints[0].Y, floorPoints[0].Z);
+						endPoint = new XYZ(floorPoints[0].Coord.X, floorPoints[0].Coord.Y, floorPoints[0].Coord.Z);
 					}
 					else
 					{
-						endPoint = new XYZ(floorPoints[pointNum + 1].X, floorPoints[pointNum + 1].Y, floorPoints[pointNum + 1].Z);
+						endPoint = new XYZ(floorPoints[pointNum + 1].Coord.X, floorPoints[pointNum + 1].Coord.Y, floorPoints[pointNum + 1].Coord.Z);
 					}
 
 					Curve partOfFloor = Line.CreateBound(startPoint, endPoint);
