@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CreateWallsDesignAutomation;
+using System.IO;
+using System.Xml;
 
 // ReSharper disable once CheckNamespace
 namespace CreateWallsCommon
@@ -533,6 +535,128 @@ namespace CreateWallsCommon
 			}
 			//            string prompt = "The element was created!";
 			//            TaskDialog.Show("Revit", prompt);
+		}
+	}
+
+	internal class CreateBuilding
+	{
+		public void CreateBuildingElements(string jsonFilePath, string xmlFilePath, Document doc)
+		{
+			Dictionary<string, double> levelsList = new Dictionary<string, double>();
+			List<List<Point>> floorsList = new List<List<Point>>();
+			List<Line> wallsList = new List<Line>();
+
+			ReactJson json = new ReactJson();
+			if (File.Exists(jsonFilePath))
+			{
+				json = ReactJson.Parse(jsonFilePath);
+			}
+			if (File.Exists(xmlFilePath))
+			{
+				XmlDocument xmlDocument = new XmlDocument();
+				xmlDocument.Load(xmlFilePath);
+				XmlNodeList levelsXmlList = xmlDocument.SelectNodes("//Building/ProjectInformation/Levels/Level");
+				foreach (XmlNode levelsXml in levelsXmlList)
+				{
+					if (levelsXml.HasChildNodes)
+					{
+						XmlNode name = levelsXml.SelectSingleNode("Name");
+						XmlNode height = levelsXml.SelectSingleNode("Elevation");
+						if ((name != null) && (height != null))
+							levelsList.Add(name.InnerText, Convert.ToDouble(height.InnerText));
+					}
+				}
+
+				XmlNodeList nodeList = xmlDocument.SelectNodes("//Building/Floors/Floor");
+				if (nodeList != null)
+				{
+					foreach (XmlNode floorsXml in nodeList)
+					{
+						if (!floorsXml.HasChildNodes) continue;
+						XmlNode points = floorsXml.SelectSingleNode("BoundryPoints");
+						XmlNodeList pointList = points.ChildNodes;
+						List<Point> fl = new List<Point>();
+						foreach (XmlNode node in pointList)
+						{
+							XmlNode x = node.SelectSingleNode("X");
+							XmlNode y = node.SelectSingleNode("Y");
+							XmlNode z = node.SelectSingleNode("Z");
+
+							if (x == null || y == null || z == null) continue;
+							XYZ pt = new XYZ(Convert.ToDouble(x.InnerText), Convert.ToDouble(y.InnerText), Convert.ToDouble(z.InnerText));
+							Point r = Point.Create(pt);
+							fl.Add(r);
+
+						}
+						floorsList.Add(fl);
+					}
+				}
+
+				XmlNodeList wallList = xmlDocument.SelectNodes("//Building/Walls/Wall");
+				if (wallList != null)
+				{
+					foreach (XmlNode wallsXml in wallList)
+					{
+						if (!wallsXml.HasChildNodes) continue;
+						XmlNode start = wallsXml.SelectSingleNode("StartPoint");
+						XmlNode end = wallsXml.SelectSingleNode("EndPoint");
+						XmlNode heightNode = wallsXml.SelectSingleNode("Height");
+
+						if (start == null || end == null || heightNode == null) continue;
+						XmlNode startX = start.SelectSingleNode("X");
+						XmlNode startY = start.SelectSingleNode("Y");
+						XmlNode startZ = start.SelectSingleNode("Z");
+						XmlNode endX = end.SelectSingleNode("X");
+						XmlNode endY = end.SelectSingleNode("Y");
+						XmlNode endZ = end.SelectSingleNode("Z");
+
+						if (startX == null || endX == null) continue;
+						XYZ startPoint = new XYZ(Convert.ToDouble(startX.InnerText), Convert.ToDouble(startY.InnerText), Convert.ToDouble(startZ.InnerText));
+						XYZ endPoint = new XYZ(Convert.ToDouble(endX.InnerText), Convert.ToDouble(endY.InnerText), Convert.ToDouble(endZ.InnerText));
+						Line line = Line.CreateBound(startPoint, endPoint);
+						wallsList.Add(line);
+					}
+				}
+			}
+
+			if (json.Floors.Count > 0)
+			{
+				foreach (List<ReactJson.Point> floor in json.Floors)
+				{
+					List<Point> fl = new List<Point>();
+					foreach (var k in floor)
+					{
+						XYZ pt = new XYZ(k.X, k.Y, k.Z);
+						Point r = Point.Create(pt);
+						fl.Add(r);
+					}
+					floorsList.Add(fl);
+				}
+			}
+
+			if (json.Walls.Count > 0)
+			{
+				foreach (ReactJson.WallLine walls in json.Walls)
+				{
+					XYZ start = new XYZ(walls.Start.X, walls.Start.Y, walls.Start.Z);
+					XYZ end = new XYZ(walls.End.X, walls.End.Y, walls.End.Z);
+					Line line = Line.CreateBound(start, end);
+					wallsList.Add(line);
+				}
+			}
+
+			if (json.Levels.Count > 0)
+			{
+				foreach (ReactJson.Level level in json.Levels)
+				{
+					levelsList.Add(level.Name, level.Elevation);
+				}
+			}
+
+			CreateWallsCommon.Construct c = new CreateWallsCommon.Construct();
+			c.CreateLevels(doc, levelsList);
+			c.CreateFloors(floorsList, doc);
+			c.CreateWalls(wallsList, doc);
 		}
 	}
 }

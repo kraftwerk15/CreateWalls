@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace CreateWallsDesignAutomation
 {
-    class ReactJson
+    internal class ReactJson
     {
         [JsonProperty(PropertyName = "walls")]
         public IList<WallLine> Walls { get; set; }
@@ -17,7 +17,7 @@ namespace CreateWallsDesignAutomation
         public IList<IList<Point>> Floors { get; set; }
         [JsonProperty(PropertyName = "Levels")]
         public IList<Level> Levels { get; set; }
-        static public ReactJson Parse(string jsonPath)
+        public static ReactJson Parse(string jsonPath)
         {
             try
             {
@@ -36,19 +36,21 @@ namespace CreateWallsDesignAutomation
 
         internal class Point
         {
-            [JsonProperty(PropertyName = "x")]
+            [JsonProperty(PropertyName = "X")]
             public double X { get; set; } = 0.0;
-            [JsonProperty(PropertyName = "y")]
+            [JsonProperty(PropertyName = "Y")]
             public double Y { get; set; } = 0.0;
-            [JsonProperty(PropertyName = "z")]
+            [JsonProperty(PropertyName = "Z")]
             public double Z { get; set; } = 0.0;
         }
         internal class WallLine
         {
-            [JsonProperty(PropertyName = "start")]
+            [JsonProperty(PropertyName = "StartPoint")]
             public Point Start { get; set; }
-            [JsonProperty(PropertyName = "end")]
+            [JsonProperty(PropertyName = "EndPoint")]
             public Point End { get; set; }
+            [JsonProperty(PropertyName = "Height")]
+            public double Height { get; set; }
         }
         internal class Level
         {
