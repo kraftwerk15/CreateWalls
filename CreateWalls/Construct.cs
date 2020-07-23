@@ -32,14 +32,14 @@ namespace CreateWallsCommon
             }
 		}
         
-        internal void CreateWalls(List<Line> jsonReact, Document newDoc)
+        internal void CreateWalls(Dictionary<Line, double> jsonReact, Document newDoc)
 		{
 			FilteredElementCollector levelCollector = new FilteredElementCollector(newDoc);
 			levelCollector.OfClass(typeof(Level));
 			ElementId someLevelId = levelCollector.FirstElementId();
 			if (someLevelId == null || someLevelId.IntegerValue < 0) throw new System.IO.InvalidDataException("ElementID is invalid.");
 
-			List<Line> curves = jsonReact;
+			Dictionary<Line, double> curves = jsonReact;
 			//foreach (ReactJson.WallLine lines in jsonReact)
 			//{
 			//	XYZ start = new XYZ(lines.Start.X, lines.Start.Y, lines.Start.Z);
@@ -51,10 +51,12 @@ namespace CreateWallsCommon
 			{
 				wallTrans.Start();
 
-				foreach (Line oneCurve in curves)
+				foreach (KeyValuePair<Line,double> oneCurve in curves)
 				{
-					Wall.Create(newDoc, oneCurve, someLevelId, false);
-				}
+					Wall w = Wall.Create(newDoc, oneCurve.Key, someLevelId, false);
+                    Parameter k = w.GetParameters("Unconnected Height").FirstOrDefault();
+                    k?.Set(oneCurve.Value);
+                }
 
 				wallTrans.Commit();
 			}
@@ -544,7 +546,7 @@ namespace CreateWallsCommon
 		{
 			Dictionary<string, double> levelsList = new Dictionary<string, double>();
 			List<List<Point>> floorsList = new List<List<Point>>();
-			List<Line> wallsList = new List<Line>();
+			Dictionary<Line,double> wallsList = new Dictionary<Line, double>();
 
 			ReactJson json = new ReactJson();
 			if (File.Exists(jsonFilePath))
@@ -614,43 +616,49 @@ namespace CreateWallsCommon
 						XYZ startPoint = new XYZ(Convert.ToDouble(startX.InnerText), Convert.ToDouble(startY.InnerText), Convert.ToDouble(startZ.InnerText));
 						XYZ endPoint = new XYZ(Convert.ToDouble(endX.InnerText), Convert.ToDouble(endY.InnerText), Convert.ToDouble(endZ.InnerText));
 						Line line = Line.CreateBound(startPoint, endPoint);
-						wallsList.Add(line);
+						wallsList.Add(line, Convert.ToDouble(heightNode.InnerText));
 					}
 				}
 			}
 
-			if (json.Floors.Count > 0)
-			{
-				foreach (List<ReactJson.Point> floor in json.Floors)
-				{
-					List<Point> fl = new List<Point>();
-					foreach (var k in floor)
-					{
-						XYZ pt = new XYZ(k.X, k.Y, k.Z);
-						Point r = Point.Create(pt);
-						fl.Add(r);
-					}
-					floorsList.Add(fl);
-				}
-			}
+            if (json != null)
+            {
+                if (json.FloorsList.Floor.Count > 0)
+                {
+                    foreach (ReactJson.Floor floor in json.FloorsList.Floor)
+                    {
+						List<Point> fl = new List<Point>();
+						foreach (ReactJson.Point k in floor.BoundryPoints.Point)
+                        {
+                            XYZ pt = new XYZ(k.X, k.Y, k.Z);
+                            Point r = Point.Create(pt);
+                            fl.Add(r);
+						}
+                        floorsList.Add(fl);
+                    }
+                }
+                if (json.WallsList.Wall.Count > 0)
+                {
+                    foreach (ReactJson.Wall walls in json.WallsList.Wall)
+                    {
+                        XYZ start = new XYZ(Convert.ToDouble(walls.StartPoint.X),
+                            Convert.ToDouble(walls.StartPoint.Y),
+                            Convert.ToDouble(walls.StartPoint.Z));
+                        XYZ end = new XYZ(Convert.ToDouble(walls.EndPoint.X),
+                            Convert.ToDouble(walls.EndPoint.Y),
+                            Convert.ToDouble(walls.EndPoint.Z));
+                        Line line = Line.CreateBound(start, end);
+                        wallsList.Add(line,Convert.ToDouble(walls.Height));
+                    }
+                }
 
-			if (json.Walls.Count > 0)
-			{
-				foreach (ReactJson.WallLine walls in json.Walls)
-				{
-					XYZ start = new XYZ(walls.Start.X, walls.Start.Y, walls.Start.Z);
-					XYZ end = new XYZ(walls.End.X, walls.End.Y, walls.End.Z);
-					Line line = Line.CreateBound(start, end);
-					wallsList.Add(line);
-				}
-			}
-
-			if (json.Levels.Count > 0)
-			{
-				foreach (ReactJson.Level level in json.Levels)
-				{
-					levelsList.Add(level.Name, level.Elevation);
-				}
+                if (json._ProjectInformation.Levels.Level.Count > 0)
+                {
+                    foreach (ReactJson.Level level in json._ProjectInformation.Levels.Level)
+                    {
+                        levelsList.Add(level.Name, Convert.ToDouble(level.Elevation));
+                    }
+                }
 			}
 
 			CreateWallsCommon.Construct c = new CreateWallsCommon.Construct();
