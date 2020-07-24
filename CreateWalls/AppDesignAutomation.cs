@@ -29,10 +29,10 @@ namespace CreateWallsDesignAutomation
         public void HandleDesignAutomationReadyEvent(object sender, DesignAutomationReadyEventArgs e)
         {
             e.Succeeded = true;
-            SketchItFunc(e.DesignAutomationData);
+            DesignAutoFunction(e.DesignAutomationData);
         }
 
-        private static void SketchItFunc(DesignAutomationData data)
+        private static void DesignAutoFunction(DesignAutomationData data)
         {
             if (data == null)
                 throw new InvalidDataException(nameof(data));
@@ -45,7 +45,7 @@ namespace CreateWallsDesignAutomation
             if (newDoc == null)
                 throw new InvalidOperationException("Could not create new document.");
             string filePath = "sketchIt.rvt";
-            string filepathJson = "SketchItInput.json";
+            string filepathJson = "jsonDocument.json";
             string filepathXML = "xmlDocument.xml";
 
             CreateWallsCommon.CreateBuilding cwc = new CreateWallsCommon.CreateBuilding();
